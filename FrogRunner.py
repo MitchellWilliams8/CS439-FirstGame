@@ -12,7 +12,8 @@ class Game(simpleGE.Scene):
         self.fly = Fly(self)
         self.platform = Platform(self)
         self.goldScarab = goldScarab(self)
-        self.sprites = [self.frog, self.ground, self.fly, self.lblScore, self.platform, self.goldScarab]
+        self.beetle = Beetle(self)
+        self.sprites = [self.frog, self.ground, self.fly, self.lblScore, self.platform, self.goldScarab, self.beetle]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -22,7 +23,12 @@ class Game(simpleGE.Scene):
 
         if self.frog.collidesWith(self.goldScarab):
             self.goldScarab.reset()
-            self.score += 2
+            self.score += 3
+            self.lblScore.text = f"Score: {self.score}"
+
+        if self.frog.collidesWith(self.beetle):
+            self.beetle.reset()
+            self.score -= 2
             self.lblScore.text = f"Score: {self.score}"
 
 class Frog(simpleGE.Sprite):
@@ -87,6 +93,19 @@ class Fly(simpleGE.Sprite):
         #self.position = (500, 400)
     def reset(self):
         self.x = 700
+        self.y = 275
+        self.dx = random.randint(-8,-4)
+        self.dy = random.randint(0, 0)
+
+class Beetle(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Beetle.png")
+        self.setSize(75, 75)
+        self.reset()
+
+    def reset(self):
+        self.x = 600
         self.y = 400
         self.dx = random.randint(-8,-4)
         self.dy = random.randint(0, 0)
