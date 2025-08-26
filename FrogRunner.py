@@ -66,6 +66,19 @@ class Game(simpleGE.Scene):
         if self.health <= 0:
             self.stop()
 
+        if self.platform1.x < 10:
+            self.platform1.reset()
+        if self.platform2.x < 10:
+            self.platform2.reset()
+        if self.fly.x < 10:
+            self.fly.reset()
+        if self.beetle.x < 10:
+            self.beetle.reset()
+        if self.goldScarab.x < 10:
+            self.goldScarab.reset()
+        if self.jewel.x < 10:
+            self.jewel.reset()
+
 # Player sprite
 class Frog(simpleGE.Sprite):
     def __init__(self, scene):
@@ -126,9 +139,9 @@ class Platform1 (simpleGE.Sprite):
         self.reset()
 
     def reset(self):
-        self.x = 700
+        self.x = 640
         self.y = 300
-        self.dx = random.randint(-8, -4)
+        self.dx = random.randint(-10, -2)
         self.dy = random.randint(0, 0)
 
 # Moving platform 2
@@ -139,7 +152,7 @@ class Platform2(simpleGE.Sprite):
         self.reset()
 
     def reset(self):
-        self.x = 700
+        self.x = 640
         self.y = 150
         self.dx = random.randint(-4, -1)
         self.dy = random.randint(0, 0)
@@ -273,7 +286,7 @@ class Intro(simpleGE.Scene):
             self.status = "quit"
             self.stop()
 
-
+# main
 def main():
     keepGoing = True
     score = 0
