@@ -7,7 +7,9 @@ class Game(simpleGE.Scene):
         self.setImage("Black.png")
         self.setSize = (1000,1000)
         self.lblScore = LblScore()
+        self.lblHealth = LblHealth()
         self.score = 0
+        self.health = 100
         self.frog = Frog(self)
         self.ground = groundBarrier(self)
         self.fly = Fly(self)
@@ -17,7 +19,7 @@ class Game(simpleGE.Scene):
         self.projectile = Projectile(self)
         self.sprites = [self.frog, self.ground, self.fly,
                         self.lblScore, self.platform, self.goldScarab,
-                        self.beetle, self.projectile]
+                        self.beetle, self.projectile, self.lblHealth]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -32,8 +34,8 @@ class Game(simpleGE.Scene):
 
         if self.frog.collidesWith(self.beetle):
             self.beetle.reset()
-            self.score -= 2
-            self.lblScore.text = f"Score: {self.score}"
+            self.health -= 25
+            self.lblHealth.text = f"Health: {self.health}"
 
         if self.projectile.collidesWith(self.fly):
             self.fly.reset()
@@ -41,7 +43,8 @@ class Game(simpleGE.Scene):
 
         if self.projectile.collidesWith(self.beetle):
             self.projectile.reset()
-
+        if self.health <= 0:
+            self.stop()
 # Player sprite
 class Frog(simpleGE.Sprite):
     def __init__(self, scene):
@@ -166,6 +169,14 @@ class LblScore(simpleGE.Label):
         self.text = "Score: 0"
         self.center = (60,25)
 
+# Health
+class LblHealth(simpleGE.Label):
+    def __init__(self):
+        super().__init__()
+        self.clearBack = True
+        self.text = "Health: 100"
+        self.center = (200,25)
+
 # Intro
 class Intro(simpleGE.Scene):
     def __init__(self, score = 0):
@@ -179,11 +190,11 @@ class Intro(simpleGE.Scene):
         self.lblInstructions.textLines = [
             "Instructions"
         ]
-        self.lblInstructions.center = (320, 240)
-        self.lblInstructions.size = (600, 600)
+        self.lblInstructions.center = (320, 140)
+        self.lblInstructions.size = (400, 200)
         self.lblScore = simpleGE.Label()
-        self.lblScore.center = (320, 240)
-        self.lblScore.size = (600, 600)
+        self.lblScore.center = (320, 320)
+        self.lblScore.size = (250, 60)
         self.lblScore.text = f"Previous Score: {self.score}"
         self.btnPlay = simpleGE.Button()
         self.btnPlay.center = (150,400)
