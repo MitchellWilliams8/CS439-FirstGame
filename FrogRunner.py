@@ -9,7 +9,8 @@ class Game(simpleGE.Scene):
         self.frog = Frog(self)
         self.ground = groundBarrier(self)
         self.fly = Fly(self)
-        self.sprites = [self.frog, self.ground, self.fly, self.lblScore]
+        self.platform = Platform(self)
+        self.sprites = [self.frog, self.ground, self.fly, self.lblScore, self.platform]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -45,6 +46,11 @@ class Frog(simpleGE.Sprite):
                 self.bottom = self.scene.ground.top
                 self.dy = 0
                 self.inAir = False
+        if self.collidesWith(self.scene.platform):
+            if self.dy > 0:
+                self.bottom = self.scene.platform.top
+                self.dy = 0
+                self.inAir = False
 
 class groundBarrier(simpleGE.Sprite):
     def __init__(self, scene):
@@ -52,6 +58,17 @@ class groundBarrier(simpleGE.Sprite):
         self.setImage("Ground.png")
         self.setSize(1400, 50)
         self.position = (50, 450)
+
+class Platform(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.colorRect("blue",(100,20))
+        self.reset()
+    def reset(self):
+        self.x = 700
+        self.y = 300
+        self.dx = random.randint(-8, -4)
+        self.dy = random.randint(0, 0)
 
 class Fly(simpleGE.Sprite):
     def __init__(self, scene):
