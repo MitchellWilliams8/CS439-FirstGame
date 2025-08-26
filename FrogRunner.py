@@ -4,18 +4,25 @@ class Game(simpleGE.Scene):
     def __init__(self):
         super().__init__()
         self.setImage("Black.png")
+        self.setSize = (1000,1000)
         self.lblScore = LblScore()
         self.score = 0
         self.frog = Frog(self)
         self.ground = groundBarrier(self)
         self.fly = Fly(self)
         self.platform = Platform(self)
-        self.sprites = [self.frog, self.ground, self.fly, self.lblScore, self.platform]
+        self.goldScarab = goldScarab(self)
+        self.sprites = [self.frog, self.ground, self.fly, self.lblScore, self.platform, self.goldScarab]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
             self.fly.reset()
             self.score -= 1
+            self.lblScore.text = f"Score: {self.score}"
+
+        if self.frog.collidesWith(self.goldScarab):
+            self.goldScarab.reset()
+            self.score += 2
             self.lblScore.text = f"Score: {self.score}"
 
 class Frog(simpleGE.Sprite):
@@ -46,6 +53,7 @@ class Frog(simpleGE.Sprite):
                 self.bottom = self.scene.ground.top
                 self.dy = 0
                 self.inAir = False
+
         if self.collidesWith(self.scene.platform):
             if self.dy > 0:
                 self.bottom = self.scene.platform.top
@@ -80,6 +88,18 @@ class Fly(simpleGE.Sprite):
     def reset(self):
         self.x = 700
         self.y = 400
+        self.dx = random.randint(-8,-4)
+        self.dy = random.randint(0, 0)
+
+class goldScarab(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("goldScarab.png")
+        self.setSize(30, 30)
+        self.reset()
+    def reset(self):
+        self.x = 700
+        self.y = 200
         self.dx = random.randint(-8,-4)
         self.dy = random.randint(0, 0)
 
