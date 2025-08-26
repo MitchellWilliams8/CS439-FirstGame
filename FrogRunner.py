@@ -30,9 +30,10 @@ class Game(simpleGE.Scene):
         self.goldScarab = goldScarab(self)
         self.beetle = Beetle(self)
         self.projectile = Projectile(self)
+        self.jewel = Jewel(self)
         self.sprites = [self.frog, self.ground, self.fly,
                         self.lblScore, self.platform1, self.platform2, self.goldScarab,
-                        self.beetle, self.projectile, self.lblHealth]
+                        self.beetle, self.projectile, self.lblHealth, self.jewel]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -43,6 +44,11 @@ class Game(simpleGE.Scene):
         if self.frog.collidesWith(self.goldScarab):
             self.goldScarab.reset()
             self.score += 3
+            self.lblScore.text = f"Score: {self.score}"
+
+        if self.frog.collidesWith(self.jewel):
+            self.jewel.reset()
+            self.score += 10
             self.lblScore.text = f"Score: {self.score}"
 
         if self.frog.collidesWith(self.beetle):
@@ -135,7 +141,7 @@ class Platform2(simpleGE.Sprite):
     def reset(self):
         self.x = 700
         self.y = 150
-        self.dx = random.randint(-2, -1)
+        self.dx = random.randint(-4, -1)
         self.dy = random.randint(0, 0)
 
 # Enemy 1
@@ -166,7 +172,7 @@ class Beetle(simpleGE.Sprite):
         self.dx = random.randint(-8,-4)
         self.dy = random.randint(0, 0)
 
-# Scoring object
+# Scoring object 1
 class goldScarab(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
@@ -178,6 +184,20 @@ class goldScarab(simpleGE.Sprite):
         self.x = 625
         self.y = 200
         self.dx = random.randint(-8,-4)
+        self.dy = random.randint(0, 0)
+
+# Scoring object 2
+class Jewel(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Jewel.png")
+        self.setSize(15, 15)
+        self.reset()
+
+    def reset(self):
+        self.x = 625
+        self.y = 100
+        self.dx = random.randint(-4,-1)
         self.dy = random.randint(0, 0)
 
 # Projectile
