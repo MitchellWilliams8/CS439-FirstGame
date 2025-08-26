@@ -16,6 +16,7 @@ class Game(simpleGE.Scene):
         #self.points = simpleGE.Sound("Points.wav")
         #self.buzz = simpleGE.Sound("Buzz.wav")
         #self.snap = simpleGE.Sound("Snap.wav")
+        # self.screech = simpleGE.Sound("Screech.wav")
 
         self.lblScore = LblScore()
         self.lblHealth = LblHealth()
@@ -31,9 +32,10 @@ class Game(simpleGE.Scene):
         self.beetle = Beetle(self)
         self.projectile = Projectile(self)
         self.jewel = Jewel(self)
+        self.bird = Bird(self)
         self.sprites = [self.frog, self.ground, self.fly,
                         self.lblScore, self.platform1, self.platform2, self.goldScarab,
-                        self.beetle, self.projectile, self.lblHealth, self.jewel]
+                        self.beetle, self.projectile, self.lblHealth, self.jewel, self.bird]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -54,6 +56,11 @@ class Game(simpleGE.Scene):
         if self.frog.collidesWith(self.beetle):
             self.beetle.reset()
             self.health -= 25
+            self.lblHealth.text = f"Health: {self.health}"
+
+        if self.frog.collidesWith(self.bird):
+            self.bird.reset()
+            self.health -= 90
             self.lblHealth.text = f"Health: {self.health}"
 
         if self.projectile.collidesWith(self.fly):
@@ -78,6 +85,8 @@ class Game(simpleGE.Scene):
             self.goldScarab.reset()
         if self.jewel.x < 10:
             self.jewel.reset()
+        if self.bird.x < 10:
+            self.bird.reset()
 
 # Player sprite
 class Frog(simpleGE.Sprite):
@@ -183,6 +192,20 @@ class Beetle(simpleGE.Sprite):
         self.x = 625
         self.y = 400
         self.dx = random.randint(-8,-4)
+        self.dy = random.randint(0, 0)
+
+# Enemy 3
+class Bird(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Bird.png")
+        self.setSize(75, 75)
+        self.reset()
+
+    def reset(self):
+        self.x = 625
+        self.y = 50
+        self.dx = random.randint(-2,-1)
         self.dy = random.randint(0, 0)
 
 # Scoring object 1
