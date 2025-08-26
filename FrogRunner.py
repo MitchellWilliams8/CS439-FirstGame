@@ -4,27 +4,40 @@ import simpleGE, pygame, random
 class Game(simpleGE.Scene):
     def __init__(self):
         super().__init__()
+
         self.setImage("Black.png")
-        self.setSize = (1000,1000)
+        self.setSize = (5000,5000)
+
+        #pygame.mixer.music.load("Music.mp3")
+        #pygame.mixer.music.play()
+
+        #self.hurt = simpleGE.Sound("Hurt.wav")
+        #self.explosion = simpleGE.Sound("Explosion.wav")
+        #self.points = simpleGE.Sound("Points.wav")
+        #self.buzz = simpleGE.Sound("Buzz.wav")
+        #self.snap = simpleGE.Sound("Snap.wav")
+
         self.lblScore = LblScore()
         self.lblHealth = LblHealth()
         self.score = 0
         self.health = 100
+
         self.frog = Frog(self)
         self.ground = groundBarrier(self)
         self.fly = Fly(self)
-        self.platform = Platform(self)
+        self.platform1 = Platform1(self)
+        self.platform2 = Platform2(self)
         self.goldScarab = goldScarab(self)
         self.beetle = Beetle(self)
         self.projectile = Projectile(self)
         self.sprites = [self.frog, self.ground, self.fly,
-                        self.lblScore, self.platform, self.goldScarab,
+                        self.lblScore, self.platform1, self.platform2, self.goldScarab,
                         self.beetle, self.projectile, self.lblHealth]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
             self.fly.reset()
-            self.score -= 1
+            self.score -= 5
             self.lblScore.text = f"Score: {self.score}"
 
         if self.frog.collidesWith(self.goldScarab):
@@ -43,8 +56,10 @@ class Game(simpleGE.Scene):
 
         if self.projectile.collidesWith(self.beetle):
             self.projectile.reset()
+
         if self.health <= 0:
             self.stop()
+
 # Player sprite
 class Frog(simpleGE.Sprite):
     def __init__(self, scene):
@@ -77,9 +92,15 @@ class Frog(simpleGE.Sprite):
                 self.dy = 0
                 self.inAir = False
 
-        if self.collidesWith(self.scene.platform):
+        if self.collidesWith(self.scene.platform1):
             if self.dy > 0:
-                self.bottom = self.scene.platform.top
+                self.bottom = self.scene.platform1.top
+                self.dy = 0
+                self.inAir = False
+
+        if self.collidesWith(self.scene.platform2):
+            if self.dy > 0:
+                self.bottom = self.scene.platform2.top
                 self.dy = 0
                 self.inAir = False
 
@@ -91,16 +112,30 @@ class groundBarrier(simpleGE.Sprite):
         self.setSize(1400, 50)
         self.position = (50, 450)
 
-# Moving platform
-class Platform(simpleGE.Sprite):
+# Moving platform 1
+class Platform1 (simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.colorRect("blue",(100,20))
         self.reset()
+
     def reset(self):
         self.x = 700
         self.y = 300
         self.dx = random.randint(-8, -4)
+        self.dy = random.randint(0, 0)
+
+# Moving platform 2
+class Platform2(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.colorRect("purple",(75,20))
+        self.reset()
+
+    def reset(self):
+        self.x = 700
+        self.y = 150
+        self.dx = random.randint(-2, -1)
         self.dy = random.randint(0, 0)
 
 # Enemy 1
@@ -110,13 +145,12 @@ class Fly(simpleGE.Sprite):
         self.setImage("Fly.png")
         self.setSize(30, 30)
         self.reset()
-        #self.position = (500, 400)
+
     def reset(self):
         self.x = 625
         self.y = 275
         self.dx = random.randint(-8,-4)
         self.dy = random.randint(0, 0)
-
 
 # Enemy 2
 class Beetle(simpleGE.Sprite):
@@ -139,6 +173,7 @@ class goldScarab(simpleGE.Sprite):
         self.setImage("goldScarab.png")
         self.setSize(30, 30)
         self.reset()
+
     def reset(self):
         self.x = 625
         self.y = 200
@@ -184,24 +219,30 @@ class Intro(simpleGE.Scene):
         self. status = "quit"
         self.score = score
         self.setImage("black.png")
+
         #pygame.mixer.music.load("intro.mp3")
         #pygame.mixer.music.play()
+
         self.lblInstructions = simpleGE.MultiLabel()
         self.lblInstructions.textLines = [
             "Instructions"
         ]
         self.lblInstructions.center = (320, 140)
         self.lblInstructions.size = (400, 200)
+
         self.lblScore = simpleGE.Label()
         self.lblScore.center = (320, 320)
         self.lblScore.size = (250, 60)
         self.lblScore.text = f"Previous Score: {self.score}"
+
         self.btnPlay = simpleGE.Button()
         self.btnPlay.center = (150,400)
         self.btnPlay.text = "Play"
+
         self.btnQuit = simpleGE.Button()
         self.btnQuit.center = (500, 400)
         self.btnQuit.text = "Quit"
+
         self.sprites = [self.lblInstructions, self.lblScore, self.btnPlay, self.btnQuit]
 
     def process(self):
