@@ -6,7 +6,8 @@ class Game(simpleGE.Scene):
         self.setImage("Black.png")
         self.frog = Frog(self)
         self.ground = groundBarrier(self)
-        self.sprites = [self.frog, self.ground]
+        self.fly = Fly(self)
+        self.sprites = [self.frog, self.ground, self.fly]
 
 class Frog(simpleGE.Sprite):
     def __init__(self, scene):
@@ -43,6 +44,13 @@ class groundBarrier(simpleGE.Sprite):
         self.setImage("Ground.png")
         self.setSize(1400, 50)
         self.position = (50, 450)
+
+class Fly(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Fly.png")
+        self.setSize(30, 30)
+        self.position = (500, 400)
 
 def main():
     game = Game()
