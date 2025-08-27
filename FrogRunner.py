@@ -1,7 +1,18 @@
 import pygame
 import random
 import simpleGE
+import time
 
+"""
+Sound Effects:
+
+Buzz - nosycat: https://opengameart.org/content/buzz-grid-sounds
+Death - nosycat: https://opengameart.org/content/buzz-grid-sounds
+Explode - nosycat: https://opengameart.org/content/buzz-grid-sounds
+Points - nosycat: https://opengameart.org/content/buzz-grid-sounds
+Snap - AntumDeluge: https://opengameart.org/content/thwack-sounds
+Screech - AntumDeluge: https://opengameart.org/content/barn-owl-screech
+"""
 
 # Game scene
 class Game(simpleGE.Scene):
@@ -14,12 +25,12 @@ class Game(simpleGE.Scene):
         #pygame.mixer.music.load("Music.mp3")
         #pygame.mixer.music.play()
 
-        #self.hurt = simpleGE.Sound("Hurt.wav")
-        #self.explosion = simpleGE.Sound("Explosion.wav")
-        #self.points = simpleGE.Sound("Points.wav")
-        #self.buzz = simpleGE.Sound("Buzz.wav")
-        #self.snap = simpleGE.Sound("Snap.wav")
-        # self.screech = simpleGE.Sound("Screech.wav")
+        self.explode = simpleGE.Sound("Explode.wav")
+        self.points = simpleGE.Sound("Points.wav")
+        self.buzz = simpleGE.Sound("Buzz.wav")
+        self.snap = simpleGE.Sound("Snap.wav")
+        self.screech = simpleGE.Sound("Screech.flac")
+        self.death = simpleGE.Sound("Death.wav")
 
         self.lblScore = LblScore()
         self.lblHealth = LblHealth()
@@ -46,45 +57,56 @@ class Game(simpleGE.Scene):
         if self.frog.collidesWith(self.fly):
             self.fly.reset()
             self.score -= 5
+            self.buzz.play()
             self.lblScore.text = f"Score: {self.score}"
 
         if self.frog.collidesWith(self.goldScarab):
             self.goldScarab.reset()
             self.score += 3
+            self.points.play()
             self.lblScore.text = f"Score: {self.score}"
 
         if self.frog.collidesWith(self.jewel):
             self.jewel.reset()
             self.score += 10
+            self.points.play()
             self.lblScore.text = f"Score: {self.score}"
 
         if self.frog.collidesWith(self.beetle):
             self.beetle.reset()
             self.health -= 25
+            self.snap.play()
             self.lblHealth.text = f"Health: {self.health}"
 
         if self.frog.collidesWith(self.bird):
             self.health -= 90
+            self.screech.play()
             self.lblHealth.text = f"Health: {self.health}"
 
         if self.projectile.collidesWith(self.fly):
             self.explosion.explode()
+            self.explode.play()
             self.fly.reset()
             self.projectile.reset()
 
         if self.projectile.collidesWith(self.beetle):
             self.explosion.explode()
+            self.explode.play()
             self.projectile.reset()
-
 
         if self.projectile.collidesWith(self.bird):
             self.explosion.explode()
+            self.explode.play()
             self.projectile.reset()
 
-
+        # Game over factor
         if self.health <= 0:
+            self.death.play()
+            time.sleep(1.5)
             self.stop()
 
+        # Resets sprites when they reach the left side of screen
+        # This Randomizes their speed instead of just wrapping
         if self.platform1.x < 10:
             self.platform1.reset()
         if self.platform2.x < 10:
@@ -143,6 +165,7 @@ class Frog(simpleGE.Sprite):
                 self.bottom = self.scene.platform2.top
                 self.dy = 0
                 self.inAir = False
+
 
 # Ground
 class groundBarrier(simpleGE.Sprite):
@@ -267,7 +290,7 @@ class Projectile(simpleGE.Sprite):
     def reset(self):
         self.hide()
 
-
+# Explosion effect
 class Explosion(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
