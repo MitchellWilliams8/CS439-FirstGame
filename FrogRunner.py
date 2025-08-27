@@ -1,4 +1,7 @@
-import simpleGE, pygame, random, time
+import pygame
+import random
+import simpleGE
+
 
 # Game scene
 class Game(simpleGE.Scene):
@@ -268,13 +271,22 @@ class Projectile(simpleGE.Sprite):
 class Explosion(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
+        self.oldPosition = None
         self.setImage("Explosion.png")
         self.setSize(100, 100)
         self.reset()
+        self.timer = simpleGE.Timer()
+        self.timer.totalTime = .5
 
     def explode(self):
-        self.position = (self.scene.projectile.x, self.scene.projectile.y)
+        pos = self.position = (self.scene.projectile.x, self.scene.projectile.y)
+        self.oldPosition = pos
+        self.show()
+        self.timer.start()
 
+    def process(self):
+        if self.visible and self.timer.getElapsedTime() >= .5:
+            self.reset()
 
     def reset(self):
         self.hide()
