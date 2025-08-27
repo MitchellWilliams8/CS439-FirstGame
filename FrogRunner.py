@@ -252,15 +252,18 @@ class Projectile(simpleGE.Sprite):
         super().__init__(scene)
         self.setImage("Projectile.png")
         self.setSize(50, 50)
-        self.setBoundAction(self.reset())
+        self.setBoundAction(self.HIDE)
+        self.hide()
 
     def shoot(self):
-        self.position = (self.scene.frog.x, self.scene.frog.y)
-        self.speed = 7
+        if not self.visible:
+            self.show()
+            self.position = (self.scene.frog.x, self.scene.frog.y)
+            self.speed = 7
 
     def reset(self):
-        self.position = (-100, -100)
-        self.speed = 0
+        self.hide()
+
 
 class Explosion(simpleGE.Sprite):
     def __init__(self, scene):
@@ -271,7 +274,7 @@ class Explosion(simpleGE.Sprite):
 
     def explode(self):
         self.position = (self.scene.projectile.x, self.scene.projectile.y)
-        start_time = time.time()
+
 
     def reset(self):
         self.hide()
