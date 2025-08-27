@@ -1,4 +1,4 @@
-import simpleGE, pygame, random
+import simpleGE, pygame, random, time
 
 # Game scene
 class Game(simpleGE.Scene):
@@ -33,9 +33,11 @@ class Game(simpleGE.Scene):
         self.projectile = Projectile(self)
         self.jewel = Jewel(self)
         self.bird = Bird(self)
+        self.explosion = Explosion(self)
         self.sprites = [self.frog, self.ground, self.fly,
                         self.lblScore, self.platform1, self.platform2, self.goldScarab,
-                        self.beetle, self.projectile, self.lblHealth, self.jewel, self.bird]
+                        self.beetle, self.projectile, self.lblHealth, self.jewel,
+                        self.bird, self.explosion]
 
     def process(self):
         if self.frog.collidesWith(self.fly):
@@ -59,16 +61,23 @@ class Game(simpleGE.Scene):
             self.lblHealth.text = f"Health: {self.health}"
 
         if self.frog.collidesWith(self.bird):
-            self.bird.reset()
             self.health -= 90
             self.lblHealth.text = f"Health: {self.health}"
 
         if self.projectile.collidesWith(self.fly):
+            self.explosion.explode()
             self.fly.reset()
             self.projectile.reset()
 
         if self.projectile.collidesWith(self.beetle):
+            self.explosion.explode()
             self.projectile.reset()
+
+
+        if self.projectile.collidesWith(self.bird):
+            self.explosion.explode()
+            self.projectile.reset()
+
 
         if self.health <= 0:
             self.stop()
@@ -174,6 +183,7 @@ class Fly(simpleGE.Sprite):
         self.setSize(30, 30)
         self.reset()
 
+
     def reset(self):
         self.x = 625
         self.y = 275
@@ -251,6 +261,20 @@ class Projectile(simpleGE.Sprite):
     def reset(self):
         self.position = (-100, -100)
         self.speed = 0
+
+class Explosion(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Explosion.png")
+        self.setSize(100, 100)
+        self.reset()
+
+    def explode(self):
+        self.position = (self.scene.projectile.x, self.scene.projectile.y)
+        start_time = time.time()
+
+    def reset(self):
+        self.hide()
 
 # Score
 class LblScore(simpleGE.Label):
