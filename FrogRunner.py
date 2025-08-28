@@ -4,6 +4,9 @@ import simpleGE
 import time
 
 """
+Background:
+ansimuz: https://opengameart.org/content/sunnyland-forest-of-illusion
+
 Sound Effects:
 
 Buzz - nosycat: https://opengameart.org/content/buzz-grid-sounds
@@ -12,6 +15,7 @@ Explode - nosycat: https://opengameart.org/content/buzz-grid-sounds
 Points - nosycat: https://opengameart.org/content/buzz-grid-sounds
 Snap - AntumDeluge: https://opengameart.org/content/thwack-sounds
 Screech - AntumDeluge: https://opengameart.org/content/barn-owl-screech
+
 """
 
 # Game scene
@@ -19,10 +23,9 @@ class Game(simpleGE.Scene):
     def __init__(self):
         super().__init__()
 
-        self.setImage("Black.png")
-        self.setSize = (5000,5000)
+        self.setImage("Back.png")
 
-        #pygame.mixer.music.load("Music.mp3")
+        #pygame.mixer.music.load("")
         #pygame.mixer.music.play()
 
         self.explode = simpleGE.Sound("Explode.wav")
@@ -38,6 +41,8 @@ class Game(simpleGE.Scene):
         self.health = 100
 
         self.frog = Frog(self)
+        self.foreground1 = Foreground1(self)
+        self.foreground2 = Foreground2(self)
         self.ground = groundBarrier(self)
         self.fly = Fly(self)
         self.platform1 = Platform1(self)
@@ -48,7 +53,7 @@ class Game(simpleGE.Scene):
         self.jewel = Jewel(self)
         self.bird = Bird(self)
         self.explosion = Explosion(self)
-        self.sprites = [self.frog, self.ground, self.fly,
+        self.sprites = [self.foreground1, self.foreground2, self.frog, self.ground, self.fly,
                         self.lblScore, self.platform1, self.platform2, self.goldScarab,
                         self.beetle, self.projectile, self.lblHealth, self.jewel,
                         self.bird, self.explosion]
@@ -166,14 +171,48 @@ class Frog(simpleGE.Sprite):
                 self.dy = 0
                 self.inAir = False
 
+# Foreground 1
+class Foreground1 (simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Foreground.png")
+        self.setSize(700, 500)
+        self.setBoundAction(self.CONTINUE)
+        self.dx = -1
+        self.reset()
+    def process(self):
+
+        if self.right <= -0:
+            self.left = self.scene.foreground2.right
+
+    def reset(self):
+        self.position = (350, 200)
+
+# Foreground 2
+class Foreground2 (simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Foreground.png")
+        self.setSize(700, 500)
+        self.setBoundAction(self.CONTINUE)
+        self.dx = -1
+        self.reset()
+
+    def process(self):
+        if self.right <= 0:
+            self.left = self.scene.foreground1.right
+
+
+    def reset(self):
+        self.position = (1050, 200)
 
 # Ground
 class groundBarrier(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Ground.png")
-        self.setSize(1400, 50)
-        self.position = (50, 450)
+        self.setSize(700, 60)
+        self.position = (300, 455)
 
 # Moving platform 1
 class Platform1 (simpleGE.Sprite):
