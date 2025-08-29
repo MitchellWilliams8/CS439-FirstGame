@@ -135,6 +135,7 @@ class Frog(simpleGE.Sprite):
         self.setSize(60, 50)
         self.position = (50, 400)
         self.inAir = True
+        self.setBoundAction(self.CONTINUE)
 
     def process(self):
         if self.inAir:
