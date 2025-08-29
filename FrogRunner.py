@@ -4,11 +4,11 @@ import simpleGE
 import time
 
 """
-Background:
+
+Background and Ground:
 ansimuz: https://opengameart.org/content/sunnyland-forest-of-illusion
 
 Sound Effects:
-
 Buzz - nosycat: https://opengameart.org/content/buzz-grid-sounds
 Death - nosycat: https://opengameart.org/content/buzz-grid-sounds
 Explode - nosycat: https://opengameart.org/content/buzz-grid-sounds
@@ -132,7 +132,7 @@ class Frog(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Frog.png")
-        self.setSize(50, 50)
+        self.setSize(60, 50)
         self.position = (50, 400)
         self.inAir = True
 
@@ -245,7 +245,7 @@ class Fly(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Fly.png")
-        self.setSize(30, 30)
+        self.setSize(45, 45)
         self.reset()
 
 
@@ -260,7 +260,7 @@ class Beetle(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Beetle.png")
-        self.setSize(75, 75)
+        self.setSize(100, 55)
         self.reset()
 
     def reset(self):
@@ -274,7 +274,7 @@ class Bird(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Bird.png")
-        self.setSize(75, 75)
+        self.setSize(80, 75)
         self.reset()
 
     def reset(self):
@@ -288,7 +288,7 @@ class goldScarab(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("goldScarab.png")
-        self.setSize(30, 30)
+        self.setSize(40, 40)
         self.reset()
 
     def reset(self):
@@ -302,7 +302,7 @@ class Jewel(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Jewel.png")
-        self.setSize(15, 15)
+        self.setSize(40, 30)
         self.reset()
 
     def reset(self):
@@ -316,7 +316,7 @@ class Projectile(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Projectile.png")
-        self.setSize(50, 50)
+        self.setSize(70, 25)
         self.setBoundAction(self.HIDE)
         self.hide()
 
