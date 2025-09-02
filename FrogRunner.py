@@ -4,9 +4,12 @@ import simpleGE
 import time
 
 """
+Music:
+Matthew Pablo - https://opengameart.org/content/space-dimensions-8bitretro-version
+DST -https://opengameart.org/content/tower-defense-theme
 
 Background and Ground:
-ansimuz: https://opengameart.org/content/sunnyland-forest-of-illusion
+ansimuz - https://opengameart.org/content/sunnyland-forest-of-illusion
 
 Sound Effects:
 Buzz - nosycat: https://opengameart.org/content/buzz-grid-sounds
@@ -25,8 +28,8 @@ class Game(simpleGE.Scene):
 
         self.setImage("Back.png")
 
-        #pygame.mixer.music.load("")
-        #pygame.mixer.music.play()
+        pygame.mixer.music.load("Game.mp3")
+        pygame.mixer.music.play(-1)
 
         self.explode = simpleGE.Sound("Explode.wav")
         self.points = simpleGE.Sound("Points.wav")
@@ -246,7 +249,7 @@ class Fly(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Fly.png")
-        self.setSize(45, 45)
+        self.setSize(40, 40)
         self.reset()
 
 
@@ -261,7 +264,7 @@ class Beetle(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Beetle.png")
-        self.setSize(100, 55)
+        self.setSize(90, 50)
         self.reset()
 
     def reset(self):
@@ -289,7 +292,7 @@ class goldScarab(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("goldScarab.png")
-        self.setSize(40, 40)
+        self.setSize(35, 35)
         self.reset()
 
     def reset(self):
@@ -303,7 +306,7 @@ class Jewel(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
         self.setImage("Jewel.png")
-        self.setSize(40, 30)
+        self.setSize(35, 25)
         self.reset()
 
     def reset(self):
@@ -376,20 +379,14 @@ class Intro(simpleGE.Scene):
         super().__init__()
         self. status = "quit"
         self.score = score
-        self.setImage("black.png")
+        self.setImage("TitleScreen.png")
 
-        #pygame.mixer.music.load("intro.mp3")
-        #pygame.mixer.music.play()
-
-        self.lblInstructions = simpleGE.MultiLabel()
-        self.lblInstructions.textLines = [
-            "Instructions"
-        ]
-        self.lblInstructions.center = (320, 140)
-        self.lblInstructions.size = (400, 200)
+        pygame.mixer.music.load("Intro.mp3")
+        pygame.mixer.music.play(-1)
 
         self.lblScore = simpleGE.Label()
-        self.lblScore.center = (320, 320)
+        self.lblScore.clearBack = True
+        self.lblScore.center = (320, 90)
         self.lblScore.size = (250, 60)
         self.lblScore.text = f"Previous Score: {self.score}"
 
@@ -401,7 +398,7 @@ class Intro(simpleGE.Scene):
         self.btnQuit.center = (500, 400)
         self.btnQuit.text = "Quit"
 
-        self.sprites = [self.lblInstructions, self.lblScore, self.btnPlay, self.btnQuit]
+        self.sprites = [self.lblScore, self.btnPlay, self.btnQuit]
 
     def process(self):
         if self.btnPlay.clicked:
