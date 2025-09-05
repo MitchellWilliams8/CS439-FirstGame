@@ -56,9 +56,9 @@ class Game(simpleGE.Scene):
         self.jewel = Jewel(self)
         self.bird = Bird(self)
         self.explosion = Explosion(self)
-        self.sprites = [self.foreground1, self.foreground2, self.frog, self.ground, self.fly,
+        self.sprites = [self.foreground1, self.foreground2, self.projectile, self.frog, self.ground, self.fly,
                         self.lblScore, self.platform1, self.platform2, self.goldScarab,
-                        self.beetle, self.projectile, self.lblHealth, self.jewel,
+                        self.beetle, self.lblHealth, self.jewel,
                         self.bird, self.explosion]
 
     def process(self):
